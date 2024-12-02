@@ -1,5 +1,8 @@
 const TaskModel = require("../models/task.model");
-const { notFoundError } = require("../errors/mongodb.errors");
+const {
+    notFoundError,
+    objectIdCastError,
+} = require("../errors/mongodb.errors");
 
 class TaskController {
     constructor(req, res) {
@@ -12,6 +15,9 @@ class TaskController {
             const tasks = await TaskModel.find({});
             this.res.status(200).send(tasks);
         } catch (error) {
+            if (error instanceof Error && error.name === "CastError")
+                return objectIdCastError(this.res);
+
             this.res.status(500).send(error.message);
         }
     }
@@ -22,6 +28,9 @@ class TaskController {
             const task = await TaskModel.findById(id);
             this.res.status(200).send(task);
         } catch (error) {
+            if (error instanceof Error && error.name === "CastError")
+                return objectIdCastError(this.res);
+
             this.res.status(500).send(error.message);
         }
     }
@@ -41,6 +50,9 @@ class TaskController {
             const task = await TaskModel.findByIdAndUpdate(id, this.req.body);
             this.res.status(200).send(task);
         } catch (error) {
+            if (error instanceof Error && error.name === "CastError")
+                return objectIdCastError(this.res);
+
             this.res.status(500).send(error.message);
         }
     }
@@ -51,6 +63,9 @@ class TaskController {
             const task = await TaskModel.findByIdAndDelete(id);
             this.res.status(200).send(task);
         } catch (error) {
+            if (error instanceof Error && error.name === "CastError")
+                return objectIdCastError(this.res);
+
             this.res.status(500).send(error.message);
         }
     }
