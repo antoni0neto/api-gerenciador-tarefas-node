@@ -10,36 +10,19 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    return new TaskController(req, res).getTask();
+    return new TaskController(req, res).getTaskById();
 });
 
 router.post("/", async (req, res) => {
-    try {
-        const task = await TaskModel.create(req.body);
-        res.status(201).send(task);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+    return new TaskController(req, res).createTask();
 });
 
 router.patch("/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const task = await TaskModel.findByIdAndUpdate(id, req.body);
-        res.status(200).send(task);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+    return new TaskController(req, res).updateTask();
 });
 
 router.delete("/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const task = await TaskModel.findByIdAndDelete(id);
-        res.status(200).send(task);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+    return new TaskController(req, res).deleteTask();
 });
 
 module.exports = router;
