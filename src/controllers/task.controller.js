@@ -1,4 +1,5 @@
 const TaskModel = require("../models/task.model");
+const { notFoundError } = require("../errors/mongodb.errors");
 
 class TaskController {
     constructor(req, res) {
@@ -6,7 +7,7 @@ class TaskController {
         this.res = res;
     }
 
-    async getTasks() {
+    async getAll() {
         try {
             const tasks = await TaskModel.find({});
             this.res.status(200).send(tasks);
@@ -15,7 +16,7 @@ class TaskController {
         }
     }
 
-    async getTaskById() {
+    async getById() {
         try {
             const { id } = this.req.params;
             const task = await TaskModel.findById(id);
@@ -25,7 +26,7 @@ class TaskController {
         }
     }
 
-    async createTask() {
+    async create() {
         try {
             const task = await TaskModel.create(this.req.body);
             this.res.status(201).send(task);
@@ -34,7 +35,7 @@ class TaskController {
         }
     }
 
-    async updateTask() {
+    async update() {
         try {
             const { id } = this.req.params;
             const task = await TaskModel.findByIdAndUpdate(id, this.req.body);
@@ -44,7 +45,7 @@ class TaskController {
         }
     }
 
-    async deleteTask() {
+    async delete() {
         try {
             const { id } = this.req.params;
             const task = await TaskModel.findByIdAndDelete(id);
